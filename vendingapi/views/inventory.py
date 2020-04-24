@@ -3,7 +3,8 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from vendingapi.models import Inventory
+from vendingapi.models import Inventory, Coin
+from .coins import CoinSerializer
 
 
 
@@ -91,14 +92,37 @@ class Inventories(ViewSet):
         NOTE: Replace the 1 with any ID you wish to retrieve 
         '''
         try:
+            coin = Coin.objects.get(pk=1)
+            change = coin.coin - 2
+
             # get single inventory item
             inventory = Inventory.objects.get(pk=pk)
+            inventory.quantity = inventory.quantity - 1
 
-            # take response and covert to JSON
-            serializer = InventorySerializer(inventory, context={'request': request})
+            if change >= 0 and inventory.quantity >= 0:
 
-            # return repsonse as JSON
-            return Response(serializer.data)
+                coin.coin = 0
+
+                coin.save()
+                inventory.save()
+
+                response = Response({"quantity": 1}, status=status.HTTP_204_NO_CONTENT)
+                response['X-Coins'] = change
+                response['X-Inventory-Remaining'] = inventory.quantity
+
+                # return repsonse as JSON
+                return response
+            elif change < 0: 
+
+                response = Response(status=status.HTTP_403_FORBIDDEN)
+                response['X-Coins'] = [coin.coin | 2]
+                return response
+            
+            elif inventory.quantity < 0:
+                response = Response(status=status.HTTP_404_NOT_FOUND)
+                response['X-Coins'] = coin.coin
+                return response
+
 
         except Exception as ex:
             # if the item could not be retrived, throw a HTTP server error

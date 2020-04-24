@@ -68,21 +68,17 @@ class Coins(ViewSet):
 
         NOTE: Replace the 1 with any ID you wish to retrieve 
         '''
-        try:
-            # get single inventory item
-            coin = Coin.objects.get(pk=pk)
+        
+        # get single inventory item
+        coin = Coin.objects.get(pk=pk)
 
-            current_amount = coin.coin
+        current_amount = coin.coin
 
-            coin.coin = request.data['coin'] + current_amount
+        coin.coin = request.data['coin'] + current_amount
 
-            coin.save()
+        coin.save()
 
-            response = Response(status=status.HTTP_204_NO_CONTENT)
-            response['X-Coins'] = coin.coin
-            # return repsonse as JSON
-            return response
-
-        except Exception as ex:
-            # if the item could not be retrived, throw a HTTP server error
-            return HttpResponseServerError(ex)
+        response = Response(status=status.HTTP_204_NO_CONTENT)
+        response['X-Coins'] = coin.coin
+        # return repsonse as JSON
+        return response
