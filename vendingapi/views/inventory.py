@@ -31,36 +31,75 @@ class Inventories(ViewSet):
 
     def retrieve(self, request, pk=None):
         '''
-        Handles GET requests for a single industry 
+        Handles GET requests for a single inventory item
+
         Returns:
-            Response --- JSON serialized industry instance
-        To access a single industry: 
-        http://localhost:8000/industries/1
+            Response --- JSON serialized inventory instance
+
+        To access a single inventory item: 
+        http://localhost:8000/type object 'Inventory' has no attribute 'objects'/1
+
         NOTE: Replace the 1 with any ID you wish to retrieve 
         '''
         try:
-            # get single industry
+            # get single inventory item
             inventory = Inventory.objects.get(pk=pk)
+
+            # take response and covert to JSON
             serializer = InventorySerializer(inventory, context={'request': request})
+
+            # return repsonse as JSON
             return Response(serializer.data)
+
         except Exception as ex:
+            # if the item could not be retrived, throw a HTTP server error
             return HttpResponseServerError(ex)
     
 
     def list(self, request):
         '''
-        Handles the GET all requstes to the industry resource
+        Handles the GET all requstes to the inventory resource
+
         Returns: 
-        Response -- JSON serialized list of industry
-        To access all industries: 
-        http://localhost:8000/industries
+        Response -- JSON serialized list of inventory
+
+        To access all inventory: 
+        http://localhost:8000/inventory
+
         '''
 
-        # list industries
-        inventory = Inventory.objects.all()
+        # list inventory
+        inventory = Inventory.objects.all() 
 
         # take response and covert to JSON
         serializer = InventorySerializer(inventory, many=True, context={'request': request})
 
         # return repsonse as JSON
         return Response(serializer.data)
+
+
+    def update(self, request, pk=None):
+        '''
+        Handles GET requests for a single inventory item
+
+        Returns:
+            Response --- JSON serialized inventory instance
+
+        To access a single inventory item: 
+        http://localhost:8000/type object 'Inventory' has no attribute 'objects'/1
+
+        NOTE: Replace the 1 with any ID you wish to retrieve 
+        '''
+        try:
+            # get single inventory item
+            inventory = Inventory.objects.get(pk=pk)
+
+            # take response and covert to JSON
+            serializer = InventorySerializer(inventory, context={'request': request})
+
+            # return repsonse as JSON
+            return Response(serializer.data)
+
+        except Exception as ex:
+            # if the item could not be retrived, throw a HTTP server error
+            return HttpResponseServerError(ex)

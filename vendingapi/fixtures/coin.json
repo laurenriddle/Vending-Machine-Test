@@ -1,0 +1,9 @@
+[
+    {
+        "model": "vendingapi.coin",
+        "pk": 1,
+        "fields": {
+            "coin": 0
+        }
+    }
+]

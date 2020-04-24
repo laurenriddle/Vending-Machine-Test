@@ -17,11 +17,12 @@ from django.urls import include, path
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from vendingapi.models import *
-from vendingapi.views import Inventories
+from vendingapi.views import *
 
 router = routers.DefaultRouter(trailing_slash=False)
 
-router.register(r'inventory', Inventories, 'inventory')
+router.register(r'inventory', Inventories, 'inventories')
+router.register(r'coin', Coins, 'coins')
 
 urlpatterns = [
     path('', include(router.urls)),
