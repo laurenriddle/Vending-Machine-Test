@@ -86,7 +86,7 @@ class Inventories(ViewSet):
             Response --- JSON serialized inventory instance
 
         To access a single inventory item: 
-        http://localhost:8000/type object 'Inventory' has no attribute 'objects'/1
+        http://localhost:8000/inventory/1
 
         NOTE: Replace the 1 with any ID you wish to retrieve 
         '''

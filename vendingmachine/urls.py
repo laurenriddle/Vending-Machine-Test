@@ -22,7 +22,7 @@ from vendingapi.views import *
 router = routers.DefaultRouter(trailing_slash=False)
 
 router.register(r'inventory', Inventories, 'inventories')
-router.register(r'coin', Coins, 'coins')
+router.register(r'', Coins, 'coins')
 
 urlpatterns = [
     path('', include(router.urls)),
