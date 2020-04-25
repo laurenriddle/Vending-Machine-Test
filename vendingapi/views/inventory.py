@@ -4,9 +4,6 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from vendingapi.models import Inventory, Coin
-from .coins import CoinSerializer
-
-
 
 class InventorySerializer(serializers.HyperlinkedModelSerializer):
     '''
@@ -24,16 +21,10 @@ class InventorySerializer(serializers.HyperlinkedModelSerializer):
         depth = 2
 
 class Inventories(ViewSet):
-    '''
-    
-    This class houses functions for List and Retrieve for Inventory
-   
-    '''
 
     def retrieve(self, request, pk=None):
         '''
         Handles GET requests for a single inventory item
-
         Returns:
             Response --- JSON serialized inventory instance
 
@@ -43,10 +34,10 @@ class Inventories(ViewSet):
             inventory = Inventory.objects.get(pk=pk)
 
             # take response and covert to JSON
-            serializer = InventorySerializer(inventory, context={'request': request})
+            serializer = InventorySerializer(inventory.quantity, context={'request': request})
 
             # return repsonse as JSON
-            return Response(serializer.data)
+            return Response({"quantity": inventory.quantity})
 
         except Exception as ex:
             # if the item could not be retrived, throw a HTTP server error
@@ -56,7 +47,6 @@ class Inventories(ViewSet):
     def list(self, request):
         '''
         Handles the GET all requstes to the inventory resource
-
         Returns: 
         Response -- JSON serialized list of inventory
 
@@ -69,13 +59,12 @@ class Inventories(ViewSet):
         serializer = InventorySerializer(inventory, many=True, context={'request': request})
 
         # return repsonse as JSON
-        return Response(serializer.data)
+        return Response({inventory[0].name: inventory[0].quantity, inventory[1].name: inventory[1].quantity, inventory[2].name: inventory[2].quantity })
 
 
     def update(self, request, pk=None):
         '''
         Handles GET requests for a single inventory item
-
         Returns:
             Response --- JSON serialized inventory instance
 
@@ -86,33 +75,21 @@ class Inventories(ViewSet):
 
             # get single inventory item
             inventory = Inventory.objects.get(pk=pk)
-            inventory.quantity = inventory.quantity - 1
+            inventory.quantity -= 1
 
-            if change >= 0 and inventory.quantity >= 0:
-
-                coin.coin = 0
-
-                coin.save()
-                inventory.save()
-
-                response = Response({"quantity": 1}, status=status.HTTP_204_NO_CONTENT)
-                response['X-Coins'] = change
-                response['X-Inventory-Remaining'] = inventory.quantity
-
-                # return repsonse as JSON
-                return response
-            elif change < 0: 
-
-                response = Response(status=status.HTTP_403_FORBIDDEN)
-                response['X-Coins'] = [coin.coin | 2]
-                return response
+            if change < 0: 
+                return Response(headers={'X-Coins': f"{coin.coin} / 2"}, status=status.HTTP_403_FORBIDDEN)
             
             elif inventory.quantity < 0:
-                response = Response(status=status.HTTP_404_NOT_FOUND)
-                response['X-Coins'] = coin.coin
-                return response
+                return Response(headers={'X-Coins': coin.coin},status=status.HTTP_404_NOT_FOUND)
+            elif change >= 0 and inventory.quantity >= 0:
 
-
+                coin.coin = 0
+                coin.save()
+                inventory.save()
+                return Response({"quantity": 1}, headers={'X-Coins': change, 'X-Inventory-Remaining': inventory.quantity}, status=status.HTTP_204_NO_CONTENT)
+            
+       
         except Exception as ex:
-            # if the item could not be retrived, throw a HTTP server error
+            # if the item could not be found, throw a HTTP server error
             return HttpResponseServerError(ex)

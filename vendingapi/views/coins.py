@@ -5,8 +5,6 @@ from rest_framework import serializers
 from rest_framework import status
 from vendingapi.models import Coin
 
-
-
 class CoinSerializer(serializers.HyperlinkedModelSerializer):
     '''
     JSON serializer for Inventory
@@ -23,57 +21,28 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
         depth = 2
 
 class Coins(ViewSet):
-    '''
     
-    This class houses functions for List and Retrieve for Inventory
-   
-    '''
-    
-
     def destroy(self, request, pk=None):
         '''
-        Handles the GET all requstes to the inventory resource
-
+        Handles the DELETE requests to the coins endpoint
         Returns: 
         Response -- JSON serialized list of inventory
-
-        To access all inventory: 
-        http://localhost:8000/inventory
-
         '''
-
-        coin = Coin.objects.get(pk=pk)
-
-        current_amount = coin.coin
-
+        coin = Coin.objects.get(pk=1)
+        change = coin.coin
         coin.coin = 0
-
         coin.save()
-
-        response = Response(status=status.HTTP_204_NO_CONTENT)
-        response['X-Coins'] = current_amount
-        # return repsonse as JSON
-        return response
+        return Response(headers={'X-Coins': change}, status=status.HTTP_204_NO_CONTENT)
 
 
     def update(self, request, pk=None):
         '''
-        Handles GET requests for a single inventory item
-
+        Handles PUT requests for a single coin
         Returns:
             Response --- JSON serialized inventory instance
-
-        To access a single inventory item: 
-        http://localhost:8000/inventory/1
-
-        NOTE: Replace the 1 with any ID you wish to retrieve 
         '''
-        # get single inventory item
-        coin = Coin.objects.get(pk=pk)
-        # current_amount = coin.coin
-        # coin.coin = request.data['coin'] + current_amount
+        # get single coin item
+        coin = Coin.objects.get(pk=1)
         coin.coin += 1
         coin.save()
-
-        # return repsonse as JSON
         return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
