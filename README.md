@@ -34,11 +34,11 @@
 
 
 ## Vend-O-Matic Fetch Calls
-_NOTE: All requests are made with a single header of Content-Type: application/json_
+_NOTE: All requests are made with a single content type of "application/json"_
 ### Payment and Reimbursement
 
 - To make a payment to the vending machine, make a PUT request to http://localhost:8000/ with `{ "coin": 1}` in the body of your request. You will see the number of coins that you currently have inserted into the machine in the response under the X-Coins header. 
 
-- To retrieve all of the coins you have put into the vednig machine, make a DELETE request to http://localhost:8000/. You will see the number of coins that you got back in the response under the X-Coins header. 
+- To retrieve all of the coins you have put into the vending machine, make a DELETE request to http://localhost:8000/. You will see the number of coins that you got back in the response under the X-Coins header. 
 
 ### Purchasing a Beverage
