@@ -1,0 +1,26 @@
+[
+    {
+        "model": "vendingapi.inventory",
+        "pk": 1,
+        "fields": {
+            "name": "Coke",
+            "quantity": 5
+        }
+    },
+    {
+        "model": "vendingapi.inventory",
+        "pk": 2,
+        "fields": {
+            "name": "Pepsi",
+            "quantity": 5
+        }
+    },
+    {
+        "model": "vendingapi.inventory",
+        "pk": 3,
+        "fields": {
+            "name": "Sprite",
+            "quantity": 5
+        }
+    }
+]
