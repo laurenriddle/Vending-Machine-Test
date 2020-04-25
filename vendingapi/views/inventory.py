@@ -8,7 +8,7 @@ from vendingapi.models import Inventory, Coin
 class InventorySerializer(serializers.HyperlinkedModelSerializer):
     '''
     JSON serializer for Inventory
-    Arguments: serializers.HyperlinkedModelSerializer
+
     '''
 
     class Meta:
@@ -18,7 +18,6 @@ class InventorySerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'name', 'quantity')
-        depth = 2
 
 class Inventories(ViewSet):
 
@@ -26,39 +25,33 @@ class Inventories(ViewSet):
         '''
         Handles GET requests for a single inventory item
         Returns:
-            Response --- JSON serialized inventory instance
+            Response --- integer representing remaining quantity of beverage
 
         '''
         try:
-            # get single inventory item
             inventory = Inventory.objects.get(pk=pk)
 
-            # take response and covert to JSON
+            # covert inventory data to JSON
             serializer = InventorySerializer(inventory, context={'request': request})
 
             # return Response({"quantity": inventory.quantity})
             return Response(serializer.data["quantity"])
 
         except Exception as ex:
-            # if the item could not be retrived, throw a HTTP server error
             return HttpResponseServerError(ex)
     
 
     def list(self, request):
         '''
-        Handles the GET all requstes to the inventory resource
+        Handles the GET requests to the inventory resource
         Returns: 
-        Response -- JSON serialized list of inventory
+        Response -- list of current inventory numbers
 
         '''
 
-        # list inventory
         inventory = Inventory.objects.all() 
 
-        # take response and covert to JSON
-        # serializer = InventorySerializer(inventory, many=True, context={'request': request})
-
-        current_inventory = [beverage.quantity for beverage in inventory ]
+        current_inventory = [beverage.quantity for beverage in inventory ] # create a list of beverage quantities available
         
         # return Response({inventory[0].name: inventory[0].quantity, inventory[1].name: inventory[1].quantity, inventory[2].name: inventory[2].quantity })
         return Response({"remaining inventory": current_inventory})
@@ -73,7 +66,6 @@ class Inventories(ViewSet):
         '''
         try:
             coins = Coin.objects.all()
-
             inventory = Inventory.objects.get(pk=pk)
 
             for coin in coins: 
@@ -86,12 +78,14 @@ class Inventories(ViewSet):
                     return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_404_NOT_FOUND)
 
                 elif change >= 0 and inventory.quantity >= 0: # if the customer has inserted enough money to buy a beverage
-                    inventory.quantity -= 1
-                    coin.coin = 0
+
+                    inventory.quantity -= 1 # subtract items bought from current quantity
+                    coin.coin = 0 # reset amount of coins in machine to 0
+
                     coin.save()
                     inventory.save()
+
                     return Response({"quantity": 1}, headers={'X-Coins': change, 'X-Inventory-Remaining': inventory.quantity}, status=status.HTTP_204_NO_CONTENT)
                 
         except Exception as ex:
-            # if the beverage could not be found in the DB, trigger an HTTP server error
             return HttpResponseServerError(ex)
