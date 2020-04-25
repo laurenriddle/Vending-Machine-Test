@@ -34,7 +34,7 @@ class Inventories(ViewSet):
             inventory = Inventory.objects.get(pk=pk)
 
             # take response and covert to JSON
-            serializer = InventorySerializer(inventory.quantity, context={'request': request})
+            # serializer = InventorySerializer(inventory.quantity, context={'request': request})
 
             # return repsonse as JSON
             return Response({"quantity": inventory.quantity})
@@ -56,7 +56,7 @@ class Inventories(ViewSet):
         inventory = Inventory.objects.all() 
 
         # take response and covert to JSON
-        serializer = InventorySerializer(inventory, many=True, context={'request': request})
+        # serializer = InventorySerializer(inventory, many=True, context={'request': request})
 
         # return repsonse as JSON
         return Response({inventory[0].name: inventory[0].quantity, inventory[1].name: inventory[1].quantity, inventory[2].name: inventory[2].quantity })
