@@ -18,17 +18,17 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'coin')
-        depth = 2
+        # depth = 2
 
 class Coins(ViewSet):
     
     def destroy(self, request, pk=None):
         '''
-        Handles the DELETE requests to the coins endpoint
+        Handles the DELETE requests for a single coin
         Returns: 
-        Response -- JSON serialized list of inventory
+        Response -- Header with number of coins to be returned and HTTP 204 status code 
         '''
-        coin = Coin.objects.get(pk=1)
+        coin = Coin.objects.get(pk=pk)
         change = coin.coin
         coin.coin = 0
         coin.save()
@@ -39,10 +39,10 @@ class Coins(ViewSet):
         '''
         Handles PUT requests for a single coin
         Returns:
-            Response --- JSON serialized inventory instance
+            Response --- Header with number of coins that are currently in the machine and HTTP 204 status code
         '''
         # get single coin item
-        coin = Coin.objects.get(pk=1)
+        coin = Coin.objects.get(pk=pk)
         coin.coin += 1
         coin.save()
         return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
