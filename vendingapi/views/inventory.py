@@ -37,10 +37,6 @@ class Inventories(ViewSet):
         Returns:
             Response --- JSON serialized inventory instance
 
-        To access a single inventory item: 
-        http://localhost:8000/type object 'Inventory' has no attribute 'objects'/1
-
-        NOTE: Replace the 1 with any ID you wish to retrieve 
         '''
         try:
             # get single inventory item
@@ -64,9 +60,6 @@ class Inventories(ViewSet):
         Returns: 
         Response -- JSON serialized list of inventory
 
-        To access all inventory: 
-        http://localhost:8000/inventory
-
         '''
 
         # list inventory
@@ -86,10 +79,6 @@ class Inventories(ViewSet):
         Returns:
             Response --- JSON serialized inventory instance
 
-        To access a single inventory item: 
-        http://localhost:8000/inventory/1
-
-        NOTE: Replace the 1 with any ID you wish to retrieve 
         '''
         try:
             coin = Coin.objects.get(pk=1)
