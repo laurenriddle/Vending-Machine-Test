@@ -3,7 +3,7 @@
 
 1. Clone down this repository by running the following command in your terminal `git clone git@github.com:laurenriddle/Vending-Machine-Test.git`.
 2. After the clone is finished, run `cd Vending-Machine-Test` in your terminal. 
-3. Create your virtual environment by typing the following commands in your terminal:
+3. Create your virtual environment:
     - For OSX: 
         - `python -m venv VendingEnv`
         - `source ./VendingEnv/bin/activate`
