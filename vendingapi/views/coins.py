@@ -20,6 +20,9 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'coin')
 
 class Coins(ViewSet):
+    '''
+    Handles the views for the Coins endpoint
+    '''
     
     def destroy(self, request, pk=None):
         '''
@@ -30,14 +33,14 @@ class Coins(ViewSet):
         try:
             coin = Coin.objects.get(pk=pk)
 
-            change = coin.coin # calculates change to be returned
+            # change = coin.coin # calculates change to be returned
 
-            coin.coin = 0 # sets the value of the coins in the vending machine to 0
+            # coin.coin = 0 # sets the value of the coins in the vending machine to 0
 
-            coin.delete() # instead of actually "deleting" the coin instance, I chose to set the value of the coin to 0 again so the user can keep adding coins to the DB and purchasing more items. 
+            coin.delete() # instead of actually "deleting" the coin instance, I chose to set the value of the coin to 0 again so the user can keep adding coins to the DB and purchasing more items.
             # NOTE: If we wish to actually delete the coin from the DB, we could just replace lines 35 - 37 with "coin.delete()". The disadvantage to deleting the coin is that the user will have to go into the DB and create a new coin instance to purchase more items.
 
-            return Response(headers={'X-Coins': change}, status=status.HTTP_204_NO_CONTENT)
+            return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
 
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -51,9 +54,12 @@ class Coins(ViewSet):
         '''
         try:
             coin = Coin.objects.get(pk=pk)
-            coin.coin += 1 # insert a single coin into the machine every time the update method is called
-            coin.save()
-            return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
+            if request.data['coin'] == 1: # make sure the user is only inserting one coin at a time
+                coin.coin += 1 # insert a single coin into the machine every time the update method is called
+                coin.save()
+                return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
+            else: # if the user tried to insert more than 1 coin, we do not add additional coins to the DB
+                return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
 
         except Exception as ex:
             return HttpResponseServerError(ex)
