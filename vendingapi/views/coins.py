@@ -30,14 +30,14 @@ class Coins(ViewSet):
         try:
             coin = Coin.objects.get(pk=pk)
 
-            change = coin.coin # calculates change to be returned
+            # change = coin.coin # calculates change to be returned
 
-            coin.coin = 0 # sets the value of the coins in the vending machine to 0
+            # coin.coin = 0 # sets the value of the coins in the vending machine to 0
 
             coin.delete() # instead of actually "deleting" the coin instance, I chose to set the value of the coin to 0 again so the user can keep adding coins to the DB and purchasing more items. 
             # NOTE: If we wish to actually delete the coin from the DB, we could just replace lines 35 - 37 with "coin.delete()". The disadvantage to deleting the coin is that the user will have to go into the DB and create a new coin instance to purchase more items.
 
-            return Response(headers={'X-Coins': change}, status=status.HTTP_204_NO_CONTENT)
+            return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
 
         except Exception as ex:
             return HttpResponseServerError(ex)

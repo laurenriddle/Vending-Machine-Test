@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Inventory(models.Model):
     """
@@ -6,7 +7,7 @@ class Inventory(models.Model):
 
     """
     name = models.CharField(max_length=75, null=True)
-    quantity = models.IntegerField(null=True)
+    quantity = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null=True)
 
     class Meta:
         verbose_name = ("inventory")
