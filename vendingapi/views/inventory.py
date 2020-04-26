@@ -30,7 +30,7 @@ class Inventories(ViewSet):
         '''
         try:
             inventory = Inventory.objects.get(pk=pk)
-            
+
             serializer = InventorySerializer(inventory, context={'request': request})
 
             return Response(serializer.data["quantity"])
@@ -62,6 +62,7 @@ class Inventories(ViewSet):
 
         '''
         try:
+
             coins = Coin.objects.all()
             inventory = Inventory.objects.get(pk=pk)
 

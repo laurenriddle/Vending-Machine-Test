@@ -51,9 +51,12 @@ class Coins(ViewSet):
         '''
         try:
             coin = Coin.objects.get(pk=pk)
-            coin.coin += 1 # insert a single coin into the machine every time the update method is called
-            coin.save()
-            return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
+            if request.data['coin'] == 1: # make sure the user is only inserting one coin at a time
+                coin.coin += 1 # insert a single coin into the machine every time the update method is called
+                coin.save()
+                return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
+            else: # if the user tried to insert more than 1 coin, we do not add additional coins to the DB
+                return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
 
         except Exception as ex:
             return HttpResponseServerError(ex)
