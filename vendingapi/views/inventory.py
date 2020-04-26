@@ -19,21 +19,23 @@ class InventorySerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'name', 'quantity')
 
+
 class Inventories(ViewSet):
+    '''
+    Handles the views for the Inventories endpoint
+    '''
 
     def retrieve(self, request, pk=None):
         '''
         Handles GET requests for a single inventory item
         Returns:
-            Response --- integer representing remaining quantity of a single beverage
+            Response --- integer representing remaining quantity of a single beverage and an HTTP 200 status code
 
         '''
         try:
             inventory = Inventory.objects.get(pk=pk)
-
-            serializer = InventorySerializer(inventory, context={'request': request})
-
-            return Response(serializer.data["quantity"], status=status.HTTP_200_OK)
+        
+            return Response(inventory.quantity, status=status.HTTP_200_OK)
 
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -43,7 +45,7 @@ class Inventories(ViewSet):
         '''
         Handles the GET requests to the inventory resource
         Returns: 
-        Response -- list of current beverage inventory numbers
+        Response -- list of current beverage inventory numbers and an HTTP 200 status code
 
         '''
 
@@ -58,7 +60,7 @@ class Inventories(ViewSet):
         '''
         Handles PUT requests for a single beverage
         Returns:
-            Response --- Custom X-Coins header, quantity of beverages purchased, and either an HTTP 204, 404, or 403 status
+            Response --- Custom X-Coins header, quantity of beverages purchased, and either an HTTP 204, 404, or 403 status code
 
         '''
         try:

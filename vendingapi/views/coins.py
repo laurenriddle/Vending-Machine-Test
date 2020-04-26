@@ -20,6 +20,9 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'coin')
 
 class Coins(ViewSet):
+    '''
+    Handles the views for the Coins endpoint
+    '''
     
     def destroy(self, request, pk=None):
         '''
