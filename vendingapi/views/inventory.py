@@ -33,7 +33,7 @@ class Inventories(ViewSet):
 
             serializer = InventorySerializer(inventory, context={'request': request})
 
-            return Response(serializer.data["quantity"])
+            return Response(serializer.data["quantity"], status=status.HTTP_200_OK)
 
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -51,7 +51,7 @@ class Inventories(ViewSet):
 
         current_inventory = [ beverage.quantity for beverage in inventory ] # creates a list of beverage quantities available
         
-        return Response({"remaining inventory": current_inventory})
+        return Response({"remaining inventory": current_inventory}, status=status.HTTP_200_OK)
 
 
     def update(self, request, pk=None):
@@ -87,7 +87,7 @@ class Inventories(ViewSet):
                         coin.save()
                         inventory.save()
 
-                        return Response({"quantity": 1}, headers={'X-Coins': change, 'X-Inventory-Remaining': inventory.quantity}, status=status.HTTP_204_NO_CONTENT)
+                        return Response({"quantity": 1}, headers={'X-Coins': change, 'X-Inventory-Remaining': inventory.quantity}, status=status.HTTP_200_OK)
                     
         except Exception as ex:
             return HttpResponseServerError(ex)
