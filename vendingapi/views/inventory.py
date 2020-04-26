@@ -30,7 +30,9 @@ class Inventories(ViewSet):
         '''
         try:
             inventory = Inventory.objects.get(pk=pk)
+            
             serializer = InventorySerializer(inventory, context={'request': request})
+
             return Response(serializer.data["quantity"])
 
         except Exception as ex:
