@@ -8,7 +8,8 @@ from vendingapi.models import Coin
 class CoinSerializer(serializers.HyperlinkedModelSerializer):
     '''
     JSON serializer for Coins
-    Arguments: serializers.HyperlinkedModelSerializer
+    Arguments: 
+        serializers.HyperlinkedModelSerializer
     '''
 
     class Meta:
@@ -22,13 +23,15 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
 class Coins(ViewSet):
     '''
     Handles the views for the Coins endpoint
+    Arguments: 
+        ViewSet
     '''
     
     def destroy(self, request, pk=None):
         '''
         Handles the DELETE requests for a single coin
         Returns: 
-        Response -- Header with number of coins to be returned and HTTP 204 status code 
+            Response -- Header with number of coins to be returned and HTTP 204 status code 
         '''
         try:
             coin = Coin.objects.get(pk=pk)
