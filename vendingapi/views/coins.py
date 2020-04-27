@@ -7,8 +7,9 @@ from vendingapi.models import Coin
 
 class CoinSerializer(serializers.HyperlinkedModelSerializer):
     '''
-    JSON serializer for Inventory
-    Arguments: serializers.HyperlinkedModelSerializer
+    JSON serializer for Coins
+    Arguments: 
+        serializers.HyperlinkedModelSerializer
     '''
 
     class Meta:
@@ -22,23 +23,20 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
 class Coins(ViewSet):
     '''
     Handles the views for the Coins endpoint
+    Arguments: 
+        ViewSet
     '''
     
     def destroy(self, request, pk=None):
         '''
         Handles the DELETE requests for a single coin
         Returns: 
-        Response -- Header with number of coins to be returned and HTTP 204 status code 
+            Response -- Header with number of coins to be returned and HTTP 204 status code 
         '''
         try:
             coin = Coin.objects.get(pk=pk)
 
-            # change = coin.coin # calculates change to be returned
-
-            # coin.coin = 0 # sets the value of the coins in the vending machine to 0
-
-            coin.delete() # instead of actually "deleting" the coin instance, I chose to set the value of the coin to 0 again so the user can keep adding coins to the DB and purchasing more items.
-            # NOTE: If we wish to actually delete the coin from the DB, we could just replace lines 35 - 37 with "coin.delete()". The disadvantage to deleting the coin is that the user will have to go into the DB and create a new coin instance to purchase more items.
+            coin.delete() 
 
             return Response(headers={'X-Coins': coin.coin}, status=status.HTTP_204_NO_CONTENT)
 
@@ -48,7 +46,7 @@ class Coins(ViewSet):
 
     def update(self, request, pk=None):
         '''
-        Handles PUT requests for a single coin
+        Handles the PUT requests for a single coin
         Returns:
             Response --- Header with number of coins that are currently in the machine and HTTP 204 status code
         '''

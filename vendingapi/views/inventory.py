@@ -8,7 +8,8 @@ from vendingapi.models import Inventory, Coin
 class InventorySerializer(serializers.HyperlinkedModelSerializer):
     '''
     JSON serializer for Inventory
-
+    Arguments: 
+        serializers.HyperlinkedModelSerializer
     '''
 
     class Meta:
@@ -23,6 +24,8 @@ class InventorySerializer(serializers.HyperlinkedModelSerializer):
 class Inventories(ViewSet):
     '''
     Handles the views for the Inventories endpoint
+    Arguments: 
+        ViewSet
     '''
 
     def retrieve(self, request, pk=None):
@@ -45,7 +48,7 @@ class Inventories(ViewSet):
         '''
         Handles the GET requests to the inventory resource
         Returns: 
-        Response -- list of current beverage inventory numbers and an HTTP 200 status code
+            Response -- list of current beverage inventory numbers and an HTTP 200 status code
 
         '''
 
@@ -60,7 +63,7 @@ class Inventories(ViewSet):
         '''
         Handles PUT requests for a single beverage
         Returns:
-            Response --- Custom X-Coins header, quantity of beverages purchased, and either an HTTP 204, 404, or 403 status code
+            Response --- Custom X-Coins header, quantity of beverages purchased, and either an HTTP 200, 404, or 403 status code
 
         '''
         try:
