@@ -30,7 +30,7 @@
 
 	- `python manage.py runserver`
 
-8. Use Postman to test the application. See the documentation below for the requests that can be made to this API. 
+8. Use Postman to test the application. See the documentation below for a list of requests that can be made to this API. 
 
 
 ## Vend-O-Matic Fetch Calls
