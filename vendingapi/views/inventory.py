@@ -8,7 +8,7 @@ from vendingapi.models import Inventory, Coin
 class InventorySerializer(serializers.HyperlinkedModelSerializer):
     '''
     JSON serializer for Inventory
-
+    Arguments: serializers.HyperlinkedModelSerializer
     '''
 
     class Meta:
