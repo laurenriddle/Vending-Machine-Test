@@ -63,7 +63,7 @@ class Inventories(ViewSet):
         '''
         Handles PUT requests for a single beverage
         Returns:
-            Response --- Custom X-Coins header, quantity of beverages purchased, and either an HTTP 204, 404, or 403 status code
+            Response --- Custom X-Coins header, quantity of beverages purchased, and either an HTTP 200, 404, or 403 status code
 
         '''
         try:

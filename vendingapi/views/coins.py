@@ -46,7 +46,7 @@ class Coins(ViewSet):
 
     def update(self, request, pk=None):
         '''
-        Handles PUT requests for a single coin
+        Handles the PUT requests for a single coin
         Returns:
             Response --- Header with number of coins that are currently in the machine and HTTP 204 status code
         '''
